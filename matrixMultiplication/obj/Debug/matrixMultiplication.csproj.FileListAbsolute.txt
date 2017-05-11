@@ -1,0 +1,6 @@
+c:\users\inteldoter\documents\visual studio 2017\Projects\matrixMultiplication\matrixMultiplication\bin\Debug\matrixMultiplication.exe.config
+c:\users\inteldoter\documents\visual studio 2017\Projects\matrixMultiplication\matrixMultiplication\bin\Debug\matrixMultiplication.exe
+c:\users\inteldoter\documents\visual studio 2017\Projects\matrixMultiplication\matrixMultiplication\bin\Debug\matrixMultiplication.pdb
+c:\users\inteldoter\documents\visual studio 2017\Projects\matrixMultiplication\matrixMultiplication\obj\Debug\matrixMultiplication.csprojResolveAssemblyReference.cache
+c:\users\inteldoter\documents\visual studio 2017\Projects\matrixMultiplication\matrixMultiplication\obj\Debug\matrixMultiplication.exe
+c:\users\inteldoter\documents\visual studio 2017\Projects\matrixMultiplication\matrixMultiplication\obj\Debug\matrixMultiplication.pdb
