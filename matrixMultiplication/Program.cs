@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -12,9 +13,8 @@ namespace matrixMultiplication
         public static int[,] matrixB;
         public static int[,] matrixA;
 
-        public static int[,] fillMatrix(int width, int height)
+        public static int[,] fillMatrix(int width, int height, Random rnd)
         {
-            Random rnd = new Random();
             int[,] matrix = new int[width, height];
             for (int i = 0; i < width; i++)
             {
@@ -26,18 +26,30 @@ namespace matrixMultiplication
             return matrix;
         }
 
-        public static void logMatrix()
+        public static void logMatrix(int[,] matrix)
         {
-            for (int i = 0; i < matrixC.GetLength(0); i++)
+            for (int i = 0; i < matrix.GetLength(0); i++)
             {
-                for (int j = 0; j < matrixC.GetLength(1); j++)
+                for (int j = 0; j < matrix.GetLength(1); j++)
                 {
-                    Console.Write(matrixC[i, j] + " ");
+                    Console.Write(matrix[i, j] + " ");
                 }
                 Console.WriteLine();
             }
+            Console.WriteLine();
+        }
 
-            Console.ReadLine();
+        public static void writeMatrix(int[,] matrix, StreamWriter writer)
+        {
+            for (int i = 0; i < matrix.GetLength(0); i++)
+            {
+                for (int j = 0; j < matrix.GetLength(1); j++)
+                {
+                    writer.Write(matrix[i, j] + " ");
+                }
+                writer.WriteLine();
+            }
+            writer.WriteLine();
         }
 
         public static void matrixMultiplication()
@@ -104,17 +116,45 @@ namespace matrixMultiplication
 
         static void Main(string[] args)
         {
+            bool riba = false;
+            int matrixBheight = 2;
             int matrixAwidth = 2;
             int matrixAheight = 2;
             int matrixBwidth = 2;
-            int matrixBheight = 2;
+
+            if (!riba)
+            { 
+                Console.WriteLine("Введите количество строк матрицы А");
+                matrixAwidth = int.Parse(Console.ReadLine());
+                Console.WriteLine("Введите количество столбцов матрицы А");
+                matrixAheight = int.Parse(Console.ReadLine());
+                Console.WriteLine("Введите количество строк матрицы Б");
+                matrixBwidth = int.Parse(Console.ReadLine());
+                Console.WriteLine("Введите количество столбцов матрицы Б");
+                matrixBheight = int.Parse(Console.ReadLine());
+            }
+
             matrixC = new int[matrixAwidth, matrixBheight];
 
-            matrixA = fillMatrix(matrixAwidth, matrixAheight);
-            matrixB = fillMatrix(matrixBwidth, matrixBheight);
+            Random rnd = new Random();
+            matrixA = fillMatrix(matrixAwidth, matrixAheight, rnd);
+            matrixB = fillMatrix(matrixBwidth, matrixBheight, rnd);
             matrixMultiplication();
-            
-            logMatrix();
+
+            FileStream file = new FileStream("C://out/out.txt", FileMode.Create, FileAccess.ReadWrite);
+            StreamWriter writer = new StreamWriter(file);
+            writeMatrix(matrixA, writer);
+            writeMatrix(matrixB, writer);
+            writeMatrix(matrixC, writer);
+            writer.Close();
+            file.Close();
+
+
+            logMatrix(matrixA);
+            logMatrix(matrixB);
+            logMatrix(matrixC);
+
+            Console.ReadLine();
         }
     }
 }
