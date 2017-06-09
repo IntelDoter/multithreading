@@ -87,22 +87,22 @@ namespace matrixMultiplication
 
         public static int[] getCol(int col)
         {
-            int arrLen = matrixA.GetLength(0);
+            int arrLen = matrixB.GetLength(1);
             int[] newArr = new int[arrLen];
             for (int i = 0; i < arrLen; i++)
             {
-                newArr[i] = matrixA[col, i];
+                newArr[i] = matrixB[col, i];
             }
             return newArr;
         }
 
         public static int[] getRow(int row)
         {
-            int arrLen = matrixB.GetLength(1);
+            int arrLen = matrixA.GetLength(0);
             int[] newArr = new int[arrLen];
             for (int i = 0; i < arrLen; i++)
             {
-                newArr[i] = matrixB[i, row];
+                newArr[i] = matrixA[i, row];
             }
             return newArr;
         }
@@ -165,22 +165,22 @@ namespace matrixMultiplication
 
             if (!riba)
             { 
-                Console.WriteLine("Введите количество строк матрицы А");
-                matrixAwidth = int.Parse(Console.ReadLine());
                 Console.WriteLine("Введите количество столбцов матрицы А");
+                matrixAwidth = int.Parse(Console.ReadLine());
+                Console.WriteLine("Введите количество строк матрицы А");
                 matrixAheight = int.Parse(Console.ReadLine());
-                Console.WriteLine("Введите количество строк матрицы Б");
-                matrixBwidth = int.Parse(Console.ReadLine());
                 Console.WriteLine("Введите количество столбцов матрицы Б");
+                matrixBwidth = int.Parse(Console.ReadLine());
+                Console.WriteLine("Введите количество строк матрицы Б");
                 matrixBheight = int.Parse(Console.ReadLine());
             }
 
-            matrixC = new int[matrixAwidth, matrixBheight];
+            matrixC = new int[matrixAheight, matrixBwidth];
 
             Random rnd = new Random();
             matrixA = fillMatrix(matrixAwidth, matrixAheight, rnd);
             matrixB = fillMatrix(matrixBwidth, matrixBheight, rnd);
-            threadMatrix = fillMatrixZero(matrixAwidth, matrixBheight);
+            threadMatrix = fillMatrixZero(matrixAheight, matrixBwidth);
             matrixMultiplicationWithThreads();
             //matrixMultiplication();
 
