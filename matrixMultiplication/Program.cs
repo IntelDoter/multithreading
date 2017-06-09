@@ -12,6 +12,7 @@ namespace matrixMultiplication
         public static int[,] matrixC;
         public static int[,] matrixB;
         public static int[,] matrixA;
+        public static int[,] threadMatrix;
 
         public static int[,] fillMatrix(int width, int height, Random rnd)
         {
@@ -21,6 +22,19 @@ namespace matrixMultiplication
                 for (int j = 0; j < height; j++)
                 {
                     matrix[i, j] = rnd.Next(0, 10);
+                }
+            }
+            return matrix;
+        }
+
+        public static int[,] fillMatrixZero(int width, int height)
+        {
+            int[,] matrix = new int[width, height];
+            for (int i = 0; i < width; i++)
+            {
+                for (int j = 0; j < height; j++)
+                {
+                    matrix[i, j] = 0;
                 }
             }
             return matrix;
@@ -65,7 +79,7 @@ namespace matrixMultiplication
                     }*/
                     myObj.Add("rowA", i);
                     myObj.Add("colB", j);
-                    multiplicateNumb(myObj);
+                    multiplicateNumb(i, j);
                     myObj.Clear();
                 }
             }
@@ -93,12 +107,8 @@ namespace matrixMultiplication
             return newArr;
         }
 
-        public static void multiplicateNumb(object obj)
+        public static void multiplicateNumb(int resRow, int resCol)
         {
-            Dictionary<string, int> myObj = (Dictionary<string, int>)obj;
-            int resRow = myObj["rowA"];
-            int resCol = myObj["colB"];
-
             int[] row = getRow(resRow);
             int[] col = getCol(resCol);
 
@@ -109,18 +119,49 @@ namespace matrixMultiplication
 
         }
 
+        public static void threadFunc()
+        {
+            int lastIndexI = 0;
+            int lastIndexJ = 0;
+            for (int i = lastIndexI; i < matrixC.GetLength(0); i++)
+            {
+                for (int j = lastIndexJ; j < matrixC.GetLength(1); j++)
+                {
+                    if (matrixC[i, j] == 0)
+                    {
+                        threadMatrix[i, j] = Thread.CurrentThread.ManagedThreadId;
+                        multiplicateNumb(i, j);
+                    }
+                }
+            }
+        }
+
         public static void matrixMultiplicationWithThreads()
         {
-            
+            Thread thread1 = new Thread(threadFunc);
+            Thread thread2 = new Thread(threadFunc);
+            //Thread thread3 = new Thread(threadFunc);
+            //Thread thread4 = new Thread(threadFunc);
+
+            thread1.Start();
+            thread2.Start();
+            //thread3.Start();
+            //thread4.Start();
+
+            thread1.Join();
+            thread2.Join();
+            //thread3.Join();
+            //thread4.Join();
         }
 
         static void Main(string[] args)
         {
+            DateTime start = DateTime.Now;
             bool riba = false;
-            int matrixBheight = 2;
-            int matrixAwidth = 2;
-            int matrixAheight = 2;
-            int matrixBwidth = 2;
+            int matrixBheight = 500;
+            int matrixAwidth = 500;
+            int matrixAheight = 500;
+            int matrixBwidth = 500;
 
             if (!riba)
             { 
@@ -139,21 +180,27 @@ namespace matrixMultiplication
             Random rnd = new Random();
             matrixA = fillMatrix(matrixAwidth, matrixAheight, rnd);
             matrixB = fillMatrix(matrixBwidth, matrixBheight, rnd);
-            matrixMultiplication();
+            threadMatrix = fillMatrixZero(matrixAwidth, matrixBheight);
+            matrixMultiplicationWithThreads();
+            //matrixMultiplication();
 
             FileStream file = new FileStream("C://out/out.txt", FileMode.Create, FileAccess.ReadWrite);
             StreamWriter writer = new StreamWriter(file);
             writeMatrix(matrixA, writer);
             writeMatrix(matrixB, writer);
             writeMatrix(matrixC, writer);
+            writeMatrix(threadMatrix, writer);
             writer.Close();
             file.Close();
 
+            DateTime end = DateTime.Now;
 
-            logMatrix(matrixA);
-            logMatrix(matrixB);
-            logMatrix(matrixC);
+            //logMatrix(matrixA);
+            //logMatrix(matrixB);
+            //logMatrix(matrixC);
+            //logMatrix(threadMatrix);
 
+            Console.WriteLine(end.Subtract(start).Milliseconds);
             Console.ReadLine();
         }
     }
